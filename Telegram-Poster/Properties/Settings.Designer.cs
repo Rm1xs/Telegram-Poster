@@ -105,5 +105,29 @@ namespace Telegram_Poster.Properties {
                 this["PostsCount"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BitlyAPI {
+            get {
+                return ((string)(this["BitlyAPI"]));
+            }
+            set {
+                this["BitlyAPI"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool BitlyCheck {
+            get {
+                return ((bool)(this["BitlyCheck"]));
+            }
+            set {
+                this["BitlyCheck"] = value;
+            }
+        }
     }
 }

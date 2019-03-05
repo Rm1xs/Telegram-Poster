@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -12,13 +10,14 @@ using System.Net;
 using System.IO;
 using System.Data.SqlClient;
 using AngleSharp.Html.Parser;
-using System.Web;
 using xNet;
 using System.Net.Http;
 using TLSharp.Core;
 using TeleSharp.TL.Messages;
 using TeleSharp.TL;
 using TLSharp.Core.Utils;
+using System.Xml;
+using System.Web;
 
 namespace Telegram_Poster
 {
@@ -30,7 +29,6 @@ namespace Telegram_Poster
             InitializeComponent();
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dataGridView1.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
             string connectionString = Properties.Settings.Default.ParsedInfoConnectionString;
             string sql = "SELECT * FROM Info";
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -42,8 +40,47 @@ namespace Telegram_Poster
                 dataGridView1.DataSource = ds.Tables[0];
             }
         }
+        public static string shortUrl = string.Empty;
+        public static void Shorten(string inp)
+        {
+            if (Properties.Settings.Default.BitlyAPI != null)
+            {
+                string statusCode = string.Empty;
+                string statusText = string.Empty;
+                string longUrl = string.Empty;
+                string urlToShorten = inp;
+                XmlDocument xmlDoc = new XmlDocument();
 
-        public async System.Threading.Tasks.Task ImgParse()
+                WebRequest request = WebRequest.Create("http://api.bitly.com/v3/shorten");
+                byte[] data = Encoding.UTF8.GetBytes(string.Format("login={0}&apiKey={1}&longUrl={2}&format={3}", "rmixs", Properties.Settings.Default.BitlyAPI, HttpUtility.UrlEncode(urlToShorten), "xml"));
+
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+                request.ContentLength = data.Length;
+                using (Stream ds = request.GetRequestStream())
+                {
+                    ds.Write(data, 0, data.Length);
+                }
+                using (WebResponse response = request.GetResponse())
+                {
+                    using (StreamReader sr = new StreamReader(response.GetResponseStream()))
+                    {
+                        xmlDoc.LoadXml(sr.ReadToEnd());
+                    }
+                }
+
+                statusCode = xmlDoc.GetElementsByTagName("status_code")[0].InnerText;
+                statusText = xmlDoc.GetElementsByTagName("status_txt")[0].InnerText;
+                shortUrl = xmlDoc.GetElementsByTagName("url")[0].InnerText;
+                longUrl = xmlDoc.GetElementsByTagName("long_url")[0].InnerText;
+            }
+            else
+            {
+                MessageBox.Show("Добавте Bitly API Key");
+            }
+        }
+
+        public async Task ImgParse()
         {
             var temp = "";
             int i = 1;
@@ -67,12 +104,9 @@ namespace Telegram_Poster
         private SqlConnection connect = null;
         //-------------------------------------------------------------------------------------------------------------------
         HtmlParser HtmlParser = new HtmlParser();
-
         public struct Aps
         {
             private string url;
-
-
             public string Url { get => url; set => url = value; }
         }
         //-------------------------------------------------------------------------------------------------------------------
@@ -88,14 +122,13 @@ namespace Telegram_Poster
                 ImgParse();
             }
 
-
             const string host = "http://www.androeed.ru";
             const string hosthack = "https://www.androeed.ru/files/vzlomannie_igri_na_android.html";
             List<string> aps;
             List<string> links;
             List<string> downloadlinks;
             List<Aps> newAps = new List<Aps>();
-            using (var reqs = new HttpRequest() { Cookies = new CookieDictionary(), UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:62.0) Gecko/20100101 Firefox/62.0" })
+            using (var reqs = new xNet.HttpRequest() { Cookies = new CookieDictionary(), UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:62.0) Gecko/20100101 Firefox/62.0" })
             {
                 var htm = reqs.Get(hosthack).ToString();
                 var doc = HtmlParser.ParseDocument(htm);
@@ -132,7 +165,6 @@ namespace Telegram_Poster
             using (HttpWebResponse response = (HttpWebResponse)req.GetResponse())
             {
                 StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.GetEncoding("windows-1251"));
-
                 string answer = sr.ReadToEnd();
                 string[] items = answer.Substrings("<div class=\"item_holder", "class='os small_text'>");
                 foreach (string s in items)
@@ -152,13 +184,11 @@ namespace Telegram_Poster
                     {
                         connect = new SqlConnection(Properties.Settings.Default.ParsedInfoConnectionString);
                         connect.Open();
-                        // Оператор SQL
                         string sql = string.Format("Insert Into Info" +
                                "(Name, Description, Demands, Image, Url) Values(@Name, @Description, @Demands, @Image, @Url)");
 
                         using (SqlCommand cmd = new SqlCommand(sql, this.connect))
                         {
-                            // Добавить параметры
                             cmd.Parameters.Clear();
                             cmd.Parameters.AddWithValue("@Name", output.Name);
                             cmd.Parameters.AddWithValue("@Description", output.Description);
@@ -171,15 +201,12 @@ namespace Telegram_Poster
                                     cmd.Parameters.AddWithValue("@Url", newAps[x].Url);
                                 }
                             }
-
                             countindex++;
-
                             i++;
                             cmd.ExecuteNonQuery();
                             connect.Close();
                         }
                     }
-
                 }
             }
         }
@@ -198,6 +225,7 @@ namespace Telegram_Poster
                 using (SqlConnection connect = new SqlConnection(Properties.Settings.Default.ParsedInfoConnectionString))
                 {
                     string sqltake = "SELECT * FROM dbo.Info WHERE Name = @value";
+                    string sqlcheck ="SELECT * FROM dbo.History WHERE Name = @value";
                     SqlCommand oCmd = new SqlCommand(sqltake, connect);
                     oCmd.Parameters.AddWithValue("@value", value);
                     connect.Open();
@@ -210,7 +238,15 @@ namespace Telegram_Poster
                             version = oReader["Demands"].ToString();
                             img = oReader["Image"].ToString();
                             url = oReader["Url"].ToString();
-                            summ = name + Environment.NewLine + description + Environment.NewLine + version + Environment.NewLine + url;
+                            if (Properties.Settings.Default.BitlyCheck == true)
+                            {
+                                Shorten(url);
+                                summ = name + Environment.NewLine + description + Environment.NewLine + version + Environment.NewLine + shortUrl;
+                            }
+                            else
+                            {
+                                summ = name + Environment.NewLine + description + Environment.NewLine + version + Environment.NewLine + url;
+                            }                           
                         }
                         connect.Close();
                     }
@@ -226,7 +262,6 @@ namespace Telegram_Poster
 
                 using (SqlCommand cmd = new SqlCommand(sql, this.connect))
                 {
-
                     cmd.Parameters.AddWithValue("@Name", name);
                     cmd.Parameters.AddWithValue("@Description", description);
                     cmd.Parameters.AddWithValue("@Demands", version);
@@ -238,20 +273,17 @@ namespace Telegram_Poster
                 }
             }
         }
-        public async System.Threading.Tasks.Task SendAsync()
+        public async Task SendAsync()
         {
             var apiId = 434408;
             var apiHash = "0bdea67547ee00f2e164a5522174d7dc";
             var client = new TelegramClient(apiId, apiHash);
             await client.ConnectAsync();
-            //get available contacts 
             var result = await client.GetContactsAsync();
-            //find recipient in contacts 
             var dialogs = (TLDialogs)await client.GetUserDialogsAsync();
             var chat = dialogs.Chats
                 .OfType<TLChannel>()
                 .FirstOrDefault(c => c.Title == Properties.Settings.Default.ChanelTo);
-            // send file to the specified contact (sample from TLSharp github) 
             var fileResult = (TLInputFile)await client.UploadFile("img.jpg", new StreamReader(img));
             await client.SendUploadedPhoto(new TLInputPeerChannel() { ChannelId = chat.Id, AccessHash = chat.AccessHash.Value }, fileResult, summ);
             MessageBox.Show("Отправлено");

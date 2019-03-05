@@ -1338,14 +1338,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Telegram-Poster.exe" size="409576">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Telegram-Poster.exe" size="413672">
       <assemblyIdentity name="Telegram-Poster" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>fzbstAid9WpxkfynrK7YJoVAkVhhjUpPv9G0eK9tvrE=</dsig:DigestValue>
+        <dsig:DigestValue>XFSEubZFyOciiMazXOrCWHQf5Ak45gBL2mTgxSUBags=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -1403,13 +1403,13 @@
       <dsig:DigestValue>x/zYq8J3HykXPGOLOBpA6O+SX4t7mCVwZ5M04vEQzpA=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Telegram-Poster.exe.config" size="19907">
+  <file name="Telegram-Poster.exe.config" size="20102">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>CysrcISKuDJExroEGGRtxoAbFIflzANPTuBDGIIvDuc=</dsig:DigestValue>
+      <dsig:DigestValue>yi6jM8pT+5XqOcJHwQ2O9EVUSALvP3XLwpfBnIpIBmQ=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>

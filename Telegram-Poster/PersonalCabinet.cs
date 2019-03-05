@@ -3,17 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Collections.ObjectModel;
 using TLSharp.Core;
 using TeleSharp.TL.Messages;
 using TeleSharp.TL;
 using Telegram_Poster.Properties;
-using System.Diagnostics;
-using HtmlAgilityPack;
 
 namespace Telegram_Poster
 {
@@ -27,7 +21,6 @@ namespace Telegram_Poster
             label4.Text = "+380" + Properties.Settings.Default.PhoneNumber.ToString();
             bunifuCheckbox1.Checked = Properties.Settings.Default.AutoParse;
             bunifuCheckbox2.Checked = Properties.Settings.Default.Hesh;
-           
         }
 
         public async System.Threading.Tasks.Task GetChennals()
@@ -54,10 +47,15 @@ namespace Telegram_Poster
                     metroComboBox1.SelectedIndex = a;
                 }
             }
+            bunifuMaterialTextbox1.Text = Properties.Settings.Default.BitlyAPI;
         }
 
         private void bunifuFlatButton1_Click(object sender, EventArgs e)
         {
+            if (bunifuMaterialTextbox1.Text != null)
+            {
+                Settings.Default.BitlyAPI = bunifuMaterialTextbox1.Text.ToString();
+            }
             if (metroComboBox1.SelectedIndex > -1)
             {
                 Settings.Default.ChanelTo = metroComboBox1.SelectedItem.ToString();
@@ -79,7 +77,13 @@ namespace Telegram_Poster
             {
                 Settings.Default.Hesh = false;
             }
+            if (bunifuCheckbox3.Checked == true)
+            {
+                Properties.Settings.Default.BitlyCheck = true;
+                Properties.Settings.Default.BitlyAPI = bunifuMaterialTextbox1.Text;
+            }
             Settings.Default.Save();
+            MessageBox.Show("Сохранено!");
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -139,6 +143,17 @@ namespace Telegram_Poster
         private void bunifuCircleProgressbar1_MouseLeave(object sender, EventArgs e)
         {
             bunifuCustomLabel8.Visible = false;
+        }
+
+        private void bunifuCheckbox3_Click(object sender, EventArgs e)
+        {
+            if (bunifuCheckbox3.Checked == true)
+            {
+                bunifuCustomLabel5.Visible = false;
+                bunifuMaterialTextbox1.Visible = true;
+                bunifuCustomLabel9.Visible = true;
+                linkLabel1.Visible = true;
+            }
         }
     }
 }
