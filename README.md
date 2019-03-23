@@ -1,4 +1,4 @@
-# Telegram Poster [![Build Status](https://travis-ci.org/Rm1xs/Telegram-Poster.svg?branch=master](https://travis-ci.org/Rm1xs/Telegram-Poster.svg?branch=master)
+# Telegram Poster [![Build Status](https://travis-ci.org/Rm1xs/Telegram-Poster.png?branch=master)](https://travis-ci.org/Rm1xs/Telegram-Poster)
 The project was created for **parsing data** from the site [androeed](https://androeed.ru/) and **automatic posting** to the telegram channel.
 ## Added new features:
 - UI
