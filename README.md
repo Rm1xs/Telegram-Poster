@@ -1,4 +1,4 @@
-# Telegram Poster [![Build Status](https://travis-ci.org/Rm1xs/Telegram-Poster.png?branch=master)](https://travis-ci.org/Rm1xs/Telegram-Poster) [![JavaScript Style Guide: Good Parts](https://img.shields.io/github/commit-activity/y/Rm1xs/Telegram-Poster.svg?color=green)](https://github.com/dwyl/goodparts "JavaScript The Good Parts")
+# Telegram Poster [![Build Status](https://travis-ci.org/Rm1xs/Telegram-Poster.png?branch=master)](https://travis-ci.org/Rm1xs/Telegram-Poster) [![JavaScript Style Guide: Good Parts](https://img.shields.io/github/commit-activity/y/Rm1xs/Telegram-Poster.svg?color=green)](https://github.com/dwyl/goodparts "JavaScript The Good Parts") [![HitCount](http://hits.dwyl.io/Rm1xs/Telegram-Poster.svg)](http://hits.dwyl.io/Rm1xs/Telegram-Poster)
 The project was created for **parsing data** from the site [androeed](https://androeed.ru/) and **automatic posting** to the telegram channel.
 ## Added new features:
 - UI
