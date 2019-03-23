@@ -16,3 +16,6 @@ The project was created for **parsing data** from the site [androeed](https://an
 ![5](https://user-images.githubusercontent.com/37832400/54864503-571e0200-4d69-11e9-86b8-e609bdb127a0.PNG)
 ### Telegram channel screen
 ![6](https://user-images.githubusercontent.com/37832400/54864505-57b69880-4d69-11e9-9d07-84070d165629.PNG)
+##
+Curent version:
+> 1.0 Beta
